@@ -32,7 +32,7 @@ function populateForm() {
     const { email = '', message = '' } = savedFormData;
     formRef.email.value = email;
     formRef.message.value = message;
-    // fix of automatic resetting of field value of one of the fields after reboot
+    
     formData.email = email;
     formData.message = message;
   }
