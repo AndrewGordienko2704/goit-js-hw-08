@@ -1,29 +1,103 @@
+// Import library
 import throttle from 'lodash.throttle';
+import * as storageLocal from './storage';
 
-const form = document.querySelector('.feedback-form');
-form.addEventListener('input', throttle(onFormData, 500));
-form.addEventListener('submit', onSubmitForm);
-
+// Initial constants
+const FB_FORM_STATE = 'feedback-form-state';
 const formData = {};
 
-function onFormData(e) {
-  formData[e.target.name] = e.target.value;
-  localStorage.setItem('feedback-form-state', JSON.stringify(formData));
+// Get form element
+const formRef = document.querySelector('.feedback-form');
+
+// Call function checks localStorage
+populateForm();
+
+// Add event listener on form submit and input
+formRef.addEventListener('submit', onFormSubmit);
+formRef.addEventListener('input', throttle(onTextInput, 500));
+
+// Write on formData value event listener input  and save in localStorag
+function onTextInput(e) {
+  const { name, value } = e.target;
+
+  formData[name] = value;
+  storageLocal.save(FB_FORM_STATE, formData);
 }
 
-function onSubmitForm(e) {
-  console.log(JSON.parse(localStorage.getItem('feedback-form-state')));
-  e.preventDefault();
-  e.currentTarget.reset();
-  localStorage.removeItem('feedback-form-state');
-}
+// Checks localStorage and writ in form save value
+function populateForm() {
+  const savedFormData = storageLocal.load(FB_FORM_STATE);
 
-(function dataFromLocalStorage() {
-  const data = JSON.parse(localStorage.getItem('feedback-form-state'));
-  const email = document.querySelector('.feedback-form input');
-  const message = document.querySelector('.feedback-form textarea');
-  if (data) {
-    email.value = data.email;
-    message.value = data.message;
+  if (savedFormData) {
+    const { email = '', message = '' } = savedFormData;
+    formRef.email.value = email;
+    formRef.message.value = message;
+    // fix of automatic resetting of field value of one of the fields after reboot
+    formData.email = email;
+    formData.message = message;
   }
-})();
+}
+
+// Clears the form and 'feedback-form-state' in localstorage
+function onFormSubmit(e) {
+  e.preventDefault();
+
+  console.log(formData);
+
+  e.currentTarget.reset();
+  storageLocal.remove(FB_FORM_STATE);
+
+  // Clears obj formData
+  for (const key in formData) {
+    if (formData.hasOwnProperty(key)) delete formData[key];
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// import throttle from 'lodash.throttle';
+
+// const form = document.querySelector('.feedback-form');
+// form.addEventListener('input', throttle(onFormData, 1000));
+// form.addEventListener('submit', onSubmitForm);
+
+// const formData = {};
+
+// function onFormData(e) {
+//   formData[e.target.name] = e.target.value;
+//   localStorage.setItem('feedback-form-state', JSON.stringify(formData));
+// }
+
+// function onSubmitForm(e) {
+//   console.log(JSON.parse(localStorage.getItem('feedback-form-state')));
+//   e.preventDefault();
+//   e.currentTarget.reset();
+//   localStorage.removeItem('feedback-form-state');
+// }
+
+// (function dataFromLocalStorage() {
+//   const data = JSON.parse(localStorage.getItem('feedback-form-state'));
+//   const email = document.querySelector('.feedback-form input');
+//   const message = document.querySelector('.feedback-form textarea');
+//   if (data) {
+//     email.value = data.email;
+//     message.value = data.message;
+//   }
+// })();
+
+
