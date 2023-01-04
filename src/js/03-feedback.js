@@ -13,13 +13,13 @@ form.addEventListener("submit", onSubmit)
 
 defaultForm();
 
-console.log(parsed)
+// console.log(parsed)
 
 
 function onInput(){
          json = localStorage.getItem(formKey);
          parsed = JSON.parse(json);
-        console.log(parsed)
+        // console.log(parsed)
     localStorage.setItem(formKey, JSON.stringify({
        email : input.value,
        message : textarea.value
@@ -37,7 +37,7 @@ function onSubmit (evt){
 function defaultForm(){
          json = localStorage.getItem(formKey);
          parsed = JSON.parse(json);
-console.log(parsed)
+// console.log(parsed) 
     if(parsed){
         input.value = parsed.email || '';
         textarea.value = parsed.message || '';
