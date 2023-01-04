@@ -18,6 +18,8 @@ const videoplayerCurrentTime = storageLocal.load(VIDEOPLAYER_CURRENT_TIME) ?? 0;
 player.on('timeupdate', throttle(onPlay, 1000));
 player.setCurrentTime(videoplayerCurrentTime);
 
+console.log(VIDEOPLAYER_CURRENT_TIME)
+
 
 
 
