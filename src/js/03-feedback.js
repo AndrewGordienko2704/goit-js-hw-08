@@ -13,6 +13,9 @@ form.addEventListener("submit", onSubmit)
 
 defaultForm();
 
+form.elements.email.required = 'true';
+form.elements.message.required = 'true';
+
 // console.log(parsed)
 
 
@@ -33,6 +36,7 @@ function onSubmit (evt){
     localStorage.clear();
     input.value = '';
     textarea.value = '';
+    
 }
 function defaultForm(){
          json = localStorage.getItem(formKey);
@@ -41,6 +45,7 @@ function defaultForm(){
     if(parsed){
         input.value = parsed.email || '';
         textarea.value = parsed.message || '';
+
     }
 }
 
